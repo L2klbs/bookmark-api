@@ -29,7 +29,7 @@ jobs:
 
     env:
       DATABASE_URL: "postgresql+asyncpg://bookmark:bookmarkpass@localhost:5432/bookmark"
-      IMAGE_NAME: ghcr.io/${{ github.repository }}
+      IMAGE_NAME: ghcr.io/l2klbs/bookmark-api
 
     steps:
       - name: 📥 Checkout code
