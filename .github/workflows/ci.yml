@@ -10,23 +10,46 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: bookmark
+          POSTGRES_PASSWORD: bookmarkpass
+          POSTGRES_DB: bookmark
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DATABASE_URL: "postgresql+asyncpg://bookmark:bookmarkpass@localhost:5432/bookmark"
+
     steps:
-    - name: Checkout Code
+    - name: 📥 Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup Python
+    - name: 🐍 Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.12"
 
-    - name: Install Dependencies
+    - name: 📦 Install dependencies
       run: |
         python -m venv venv
         source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run Tests
+    - name: 🛠️ Init test database
+      run: |
+        source venv/bin/activate
+        python scripts/init_db.py
+
+    - name: ✅ Run tests
       run: |
         source venv/bin/activate
         pytest
