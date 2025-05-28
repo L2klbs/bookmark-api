@@ -45,24 +45,19 @@ jobs:
           
     - name: 📦 Install dependencies
       run: |
-        python -m venv venv
-        source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
 
     - name: 🧹 Lint code with Ruff
       run: |
-        source venv/bin/active
         ruff check .
 
     - name: 🛠️ Init test database
       run: |
-        source venv/bin/activate
         python scripts/init_db.py
 
     - name: ✅ Run tests
       run: |
-        source venv/bin/activate
         pytest
 
     
